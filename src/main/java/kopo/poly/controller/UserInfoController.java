@@ -33,7 +33,7 @@ public class UserInfoController {
 
         log.info(this.getClass().getName() + ".userInfo Start!");
 
-        // Access Token에 저장된 회원아이디 가져오기
+        // Session 저장된 로그인한 회원아이디 가져오기
         String userId = CmmUtil.nvl((String) session.getAttribute("SS_USER_ID"));
 
         UserInfoDTO pDTO = UserInfoDTO.builder().userId(userId).build();
@@ -50,9 +50,13 @@ public class UserInfoController {
     }
 
     @GetMapping(value = "logoutSuccess")
-    public ResponseEntity<CommonResponse> logoutSuccess(HttpServletRequest request) throws Exception {
+    public ResponseEntity<CommonResponse> logoutSuccess(HttpSession session) {
 
         log.info(this.getClass().getName() + ".logoutSuccess Start!");
+
+        session.removeAttribute("SS_USER_ID"); // 로그인할 때 생성한 회원아이디 세션 값 제거
+        session.removeAttribute("SS_USER_NAME"); // 로그인할 때 생성한 회원이름 세션 값 제거
+        session.removeAttribute("SS_USER_ROLE"); // 로그인할 때 생성한 회원 세션 값 제거
 
         MsgDTO dto = MsgDTO.builder().msg("로그아웃 되었습니다.").result(1).build();
 

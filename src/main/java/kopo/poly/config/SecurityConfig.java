@@ -48,7 +48,10 @@ public class SecurityConfig {
                         .successForwardUrl("/login/v1/loginSuccess") // Web MVC, Controller 사용할 때 적용 / 로그인 성공 URL
                         .failureForwardUrl("/login/v1/loginFail") // Web MVC, Controller 사용할 때 적용 / 로그인 실패 URL
                 )
-                .logout(logout -> logout.logoutSuccessUrl("/user/logout"));
+                .logout(logout -> logout
+                        .clearAuthentication(true)
+                        .logoutSuccessUrl("/user/v1/logoutSuccess")
+                );
 
         return http.build();
     }
