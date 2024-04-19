@@ -19,7 +19,7 @@
 
             // 메인화면
             $("#btnMain").on("click", function () { // 버튼 클릭했을때, 발생되는 이벤트 생성함(onclick 이벤트와 동일함)
-                location.href = "/index.html";
+                location.href = "/html/index.html";
             })
 
             // 로그인
@@ -42,10 +42,6 @@
                 $.ajax({
                     url: "/login/v1/loginProc",
                     type: "post", // 전송방식은 Post
-                    // contentType: "application/json",
-                    xhrFields: {
-                        withCredentials: true
-                    },
                     dataType: "JSON", // 전송 결과는 JSON으로 받기
                     data: $("#f").serialize(), // form 태그 내 input 등 객체를 자동으로 전송할 형태로 변경하기
                 }).then(

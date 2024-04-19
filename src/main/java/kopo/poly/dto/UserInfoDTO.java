@@ -10,7 +10,7 @@ import kopo.poly.util.EncryptUtil;
 import lombok.Builder;
 
 @Builder
-@JsonInclude(JsonInclude.Include.NON_DEFAULT)
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public record UserInfoDTO(
 
         @NotBlank(message = "아이디는 필수 입력 사항입니다.")
