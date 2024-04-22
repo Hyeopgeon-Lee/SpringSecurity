@@ -52,9 +52,18 @@ public record UserInfoDTO(
      */
     public static UserInfoDTO createUser(UserInfoDTO pDTO, String password, String roles) throws Exception {
 
-        UserInfoDTO rDTO = UserInfoDTO.builder().userId(pDTO.userId()).userName(pDTO.userName()).password(password) // Spring Security 생성해준 암호화된 비밀번호
-                .email(EncryptUtil.encAES128CBC(pDTO.email())).addr1(pDTO.addr1()).addr2(pDTO.addr2()).roles(roles) // 권한
-                .regId(pDTO.regId()).regDt(pDTO.regDt()).chgId(pDTO.chgId()).chgDt(pDTO.chgDt()).build();
+        UserInfoDTO rDTO = UserInfoDTO.builder()
+                .userId(pDTO.userId())
+                .userName(pDTO.userName())
+                .password(password) // Spring Security 생성해준 암호화된 비밀번호
+                .email(EncryptUtil.encAES128CBC(pDTO.email()))
+                .addr1(pDTO.addr1())
+                .addr2(pDTO.addr2())
+                .roles(roles) // 권한
+                .regId(pDTO.regId())
+                .regDt(pDTO.regDt())
+                .chgId(pDTO.chgId())
+                .chgDt(pDTO.chgDt()).build();
 
         return rDTO;
     }
@@ -65,7 +74,18 @@ public record UserInfoDTO(
      */
     public static UserInfoDTO from(UserInfoEntity entity) throws Exception {
 
-        UserInfoDTO rDTO = UserInfoDTO.builder().userId(entity.getUserId()).userName(entity.getUserName()).password(entity.getPassword()).email(EncryptUtil.decAES128CBC(CmmUtil.nvl(entity.getEmail()))).addr1(entity.getAddr1()).addr2(entity.getAddr2()).roles(entity.getRoles()).regId(entity.getRegId()).regDt(entity.getRegDt()).chgId(entity.getChgId()).chgDt(entity.getChgDt()).build();
+        UserInfoDTO rDTO = UserInfoDTO.builder()
+                .userId(entity.getUserId())
+                .userName(entity.getUserName())
+                .password(entity.getPassword())
+                .email(EncryptUtil.decAES128CBC(CmmUtil.nvl(entity.getEmail())))
+                .addr1(entity.getAddr1())
+                .addr2(entity.getAddr2())
+                .roles(entity.getRoles())
+                .regId(entity.getRegId())
+                .regDt(entity.getRegDt())
+                .chgId(entity.getChgId())
+                .chgDt(entity.getChgDt()).build();
 
         return rDTO;
     }
