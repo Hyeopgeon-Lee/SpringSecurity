@@ -29,17 +29,10 @@ public class UserRegController {
     // Spring Security에서 제공하는 비밀번호 암호화 객체(해시 함수)
     private final PasswordEncoder bCryptPasswordEncoder;
 
-
     @PostMapping(value = "getUserIdExists")
-    public ResponseEntity<CommonResponse> getUserIdExists(@RequestBody UserInfoDTO pDTO,
-                                                          BindingResult bindingResult) throws Exception {
+    public ResponseEntity<CommonResponse> getUserIdExists(@RequestBody UserInfoDTO pDTO) throws Exception {
 
         log.info(this.getClass().getName() + ".getUserIdExists Start!");
-
-        if (bindingResult.hasErrors()) { // Spring Validation 맞춰 잘 바인딩되었는지 체크
-            return CommonResponse.getErrors(bindingResult); // 유효성 검증 결과에 따른 에러 메시지 전달
-
-        }
 
         UserInfoDTO rDTO = userInfoSsService.getUserIdExists(pDTO);
 
@@ -64,10 +57,10 @@ public class UserRegController {
         String msg = ""; //회원가입 결과에 대한 메시지를 전달할 변수
         MsgDTO dto; // 결과 메시지 구조
 
-        try {
-            // 	 반드시, 값을 받았으면, 꼭 로그를 찍어서 값이 제대로 들어오는지 파악해야함, 반드시 작성할 것
-            log.info("pDTO : " + pDTO);
+        // 	 반드시, 값을 받았으면, 꼭 로그를 찍어서 값이 제대로 들어오는지 파악해야함, 반드시 작성할 것
+        log.info("pDTO : " + pDTO);
 
+        try {
             // 웹으로 입력받은 정보와 비밀번호, 권한 추가한 회원 가입 정보 생성하기
             UserInfoDTO nDTO = UserInfoDTO.createUser(
                     pDTO, bCryptPasswordEncoder.encode(pDTO.password()), UserRole.USER.getValue());
@@ -80,7 +73,6 @@ public class UserRegController {
             if (res == 1) {
                 msg = "회원가입되었습니다.";
 
-                //추후 회원가입 입력화면에서 ajax를 활용해서 아이디 중복, 이메일 중복을 체크하길 바람
             } else if (res == 2) {
                 msg = "이미 가입된 아이디입니다.";
 
@@ -99,7 +91,6 @@ public class UserRegController {
             dto = MsgDTO.builder().result(res).msg(msg).build();
 
             log.info(this.getClass().getName() + ".insertUserInfo End!");
-
         }
 
         return ResponseEntity.ok(

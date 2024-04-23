@@ -61,9 +61,9 @@ public record UserInfoDTO(
                 .addr1(pDTO.addr1())
                 .addr2(pDTO.addr2())
                 .roles(roles) // 권한
-                .regId(pDTO.regId())
+                .regId(pDTO.userId())
                 .regDt(DateUtil.getDateTime("yyyy-MM-dd hh:mm:ss"))
-                .chgId(pDTO.chgId())
+                .chgId(pDTO.userId())
                 .chgDt(DateUtil.getDateTime("yyyy-MM-dd hh:mm:ss")).build();
 
         return rDTO;
