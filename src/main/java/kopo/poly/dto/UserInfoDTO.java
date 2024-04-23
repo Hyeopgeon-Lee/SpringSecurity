@@ -6,6 +6,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import kopo.poly.repository.entity.UserInfoEntity;
 import kopo.poly.util.CmmUtil;
+import kopo.poly.util.DateUtil;
 import kopo.poly.util.EncryptUtil;
 import lombok.Builder;
 
@@ -61,11 +62,33 @@ public record UserInfoDTO(
                 .addr2(pDTO.addr2())
                 .roles(roles) // 권한
                 .regId(pDTO.regId())
-                .regDt(pDTO.regDt())
+                .regDt(DateUtil.getDateTime("yyyy-MM-dd hh:mm:ss"))
                 .chgId(pDTO.chgId())
-                .chgDt(pDTO.chgDt()).build();
+                .chgDt(DateUtil.getDateTime("yyyy-MM-dd hh:mm:ss")).build();
 
         return rDTO;
+    }
+
+    /**
+     * DTO 결과를 entity 변환하기
+     * 이전 실습에서 진행한 Jackson 객체를 통해 처리도 가능함
+     */
+    public static UserInfoEntity of(UserInfoDTO dto) {
+
+        UserInfoEntity entity = UserInfoEntity.builder()
+                .userId(dto.userId())
+                .userName(dto.userName())
+                .password(dto.password())
+                .email(dto.email())
+                .addr1(dto.addr1())
+                .addr2(dto.addr2())
+                .roles(dto.roles())
+                .regId(dto.regId())
+                .regDt(dto.regDt())
+                .chgId(dto.chgId())
+                .chgDt(dto.chgDt()).build();
+
+        return entity;
     }
 
     /**

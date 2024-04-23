@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <title>회원정보 보기</title>
     <link rel="stylesheet" href="/css/table.css"/>
-    <script type="text/javascript" src="/js/common.js"></script>
     <script type="text/javascript" src="/js/jquery-3.6.0.min.js"></script>
     <script type="text/javascript"
             src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
@@ -20,18 +19,7 @@
 
             // 로그아웃
             $("#btnLogout").on("click", function () { // 버튼 클릭했을때, 발생되는 이벤트 생성함(onclick 이벤트와 동일함)
-                // Ajax 호출해서 멜론차트 조회하기
-                $.ajax({
-                    url: "/user/v1/logout",
-                    type: "post", // 전송방식은 Post
-                    dataType: "JSON", // 전송 결과는 JSON으로 받기
-                }).then(
-                    function () { // 성공
-                        alert("로그아웃 되었습니다.");
-                        location.href = "/html/index.html";
-
-                    }
-                );
+                location.href = "/user/v1/logout";
             })
 
             // 회원정보 상세 조회하기

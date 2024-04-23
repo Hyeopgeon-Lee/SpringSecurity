@@ -30,13 +30,11 @@ public class SecurityConfig {
 
         http.csrf(AbstractHttpConfigurer::disable)         // POST 방식 전송을 위해 csrf 막기
                 .authorizeHttpRequests(authz -> authz // 페이지 접속 권한 설정
-                                // USER 권한
-                                .requestMatchers("/notice/**").hasAnyAuthority("ROLE_USER")
+                                .requestMatchers("/notice/v1/**").hasAnyAuthority("ROLE_USER") // USER 권한
+                                .requestMatchers("/user/v1/**").authenticated() // Spring Security 인증된 사용자만 접근
                                 .requestMatchers("/html/user/**").authenticated() // Spring Security 인증된 사용자만 접근
-//                                .antMatchers("/user/**", "/notice/**").hasAnyAuthority("ROLE_USER")
 
-                                // 관리자 권한
-                                .requestMatchers("/admin/**").hasAnyAuthority("ROLE_ADMIN")
+                                .requestMatchers("/admin/**").hasAnyAuthority("ROLE_ADMIN") // 관리자 권한
 //                        .anyRequest().authenticated() // 그외 나머지 url 요청은 인증된 사용자만 가능
                                 .anyRequest().permitAll() // 그 외 나머지 url 요청은 인증 받지 않아도 접속 가능함
                 )
@@ -51,7 +49,8 @@ public class SecurityConfig {
                 .logout(logout -> logout
                         .logoutUrl("/user/v1/logout") // 로그이웃 요청 URL
                         .clearAuthentication(true) // Spring Security 저장된 인증 정보 초기화
-                        .logoutSuccessUrl("/user/v1/logoutSuccess") // 로그아웃 성공 처리 URL(세션 값 삭제)
+                        .invalidateHttpSession(true) // 로그인 후, Controller에서 생성했한 세션(회원아이디 등) 삭제
+                        .logoutSuccessUrl("/html/index.html") // 로그아웃 성공 처리 URL(세션 값 삭제)
                 );
 
         return http.build();

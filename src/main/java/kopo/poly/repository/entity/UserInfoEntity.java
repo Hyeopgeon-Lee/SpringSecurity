@@ -5,8 +5,6 @@ import lombok.*;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
-import java.io.Serializable;
-
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
@@ -16,7 +14,7 @@ import java.io.Serializable;
 @Builder
 @Cacheable
 @Entity
-public class UserInfoEntity implements Serializable {
+public class UserInfoEntity {
 
     @Id
     @Column(name = "user_id")

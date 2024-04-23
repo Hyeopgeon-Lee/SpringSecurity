@@ -69,4 +69,27 @@ public class LoginController {
 
     }
 
+    /**
+     * 로그인 정보 가져오기
+     */
+    @PostMapping(value = "loginInfo")
+    public ResponseEntity<CommonResponse> loginInfo(HttpSession session) {
+
+        log.info(this.getClass().getName() + ".loginInfo Start!");
+
+        // Session 저장된 로그인한 회원 정보 가져오기
+        String userId = CmmUtil.nvl((String) session.getAttribute("SS_USER_ID"));
+        String userName = CmmUtil.nvl((String) session.getAttribute("SS_USER_NAME"));
+        String roles = CmmUtil.nvl((String) session.getAttribute("SS_USER_ROLE"));
+
+        // 세션 값 전달할 데이터 구조 만들기
+        UserInfoDTO dto = UserInfoDTO.builder().userId(userId).userName(userName).roles(roles).build();
+
+        log.info(this.getClass().getName() + ".loginInfo End!");
+
+        return ResponseEntity.ok(
+                CommonResponse.of(HttpStatus.OK, HttpStatus.OK.series().name(), dto));
+
+    }
+
 }

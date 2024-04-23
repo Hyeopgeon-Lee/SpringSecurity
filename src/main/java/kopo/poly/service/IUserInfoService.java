@@ -16,3 +16,4 @@ public interface IUserInfoService extends UserDetailsService {
     UserInfoDTO getUserInfo(UserInfoDTO pDTO) throws Exception;
 
 }
+
