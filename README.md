@@ -1,6 +1,6 @@
-# 🌱 Spring Security와 Redis 기반 인증 및 인가 프로젝트
+# 🌱 Spring Security와 Spring Seesion을 활용한 회원가입, 로그인 프로젝트
 
-> **Spring Boot 3.x와 Spring Security를 활용한 인증 및 인가 시스템**  
+> **Spring Boot 3.x와 Spring Security, Session를 활용한 인증 및 인가 시스템**  
 > Redis를 활용한 세션 관리와 MariaDB를 이용한 데이터 저장을 포함한 웹 애플리케이션입니다.  
 > 공유되는 코드는 한국폴리텍대학 서울강서캠퍼스 빅데이터과 수업에서 사용된 코드입니다.
 
