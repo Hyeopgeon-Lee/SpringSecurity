@@ -19,14 +19,14 @@ public class SecurityConfig {
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-        log.info(this.getClass().getName() + ".PasswordEncoder Start!");
+        log.info("{}.PasswordEncoder Start!", this.getClass().getName());
         return new BCryptPasswordEncoder();
     }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
-        log.info(this.getClass().getName() + ".filterChain Start!");
+        log.info("{}.filterChain Start!", this.getClass().getName());
 
         http.csrf(AbstractHttpConfigurer::disable)         // POST 방식 전송을 위해 csrf 막기
                 .authorizeHttpRequests(authz -> authz // 페이지 접속 권한 설정

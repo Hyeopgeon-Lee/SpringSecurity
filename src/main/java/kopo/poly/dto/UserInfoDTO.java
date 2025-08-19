@@ -21,55 +21,40 @@ import java.io.Serializable;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public record UserInfoDTO(
 
-        /** 사용자 아이디 (로그인 ID) */
         @NotBlank(message = "아이디는 필수 입력 사항입니다.")
         @Size(min = 4, max = 16, message = "아이디는 최소 4글자에서 16글자까지 입력가능합니다.")
         String userId,
 
-        /** 사용자 이름 */
         @NotBlank(message = "이름은 필수 입력 사항입니다.")
         @Size(max = 10, message = "이름은 10글자까지 입력가능합니다.")
         String userName,
 
-        /** 비밀번호 (암호화되어 저장됨) */
         @NotBlank(message = "비밀번호는 필수 입력 사항입니다.")
         @Size(max = 16, message = "비밀번호는 16글자까지 입력가능합니다.")
         String password,
 
-        /** 이메일 주소 */
         @NotBlank(message = "이메일은 필수 입력 사항입니다.")
         @Size(max = 30, message = "이메일은 30글자까지 입력가능합니다.")
         @Email String email,
 
-        /** 기본 주소 */
         @NotBlank(message = "주소는 필수 입력 사항입니다.")
         @Size(max = 30, message = "주소는 30글자까지 입력가능합니다.")
         String addr1,
 
-        /** 상세 주소 */
         @NotBlank(message = "상세 주소는 필수 입력 사항입니다.")
         @Size(max = 100, message = "상세 주소는 100글자까지 입력가능합니다.")
         String addr2,
 
-        /** 등록자 ID */
         String regId,
 
-        /** 등록일시 */
         String regDt,
 
-        /** 수정자 ID */
         String chgId,
 
-        /** 수정일시 */
         String chgDt,
 
-        /** 사용자 권한 (예: ROLE_USER, ROLE_ADMIN 등) */
         String roles,
 
-        /**
-         * 회원가입 시 중복가입 여부 확인을 위한 필드
-         * DB에 존재하지 않는 가상의 컬럼으로 사용됨 (ALIAS 컬럼)
-         */
         String existsYn
 ) implements Serializable {
 

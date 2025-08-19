@@ -26,9 +26,9 @@ public class UserInfoController {
     private final IUserInfoService userInfoService;
 
     @PostMapping(value = "userInfo")
-    public ResponseEntity<CommonResponse> userInfo(HttpSession session) throws Exception {
+    public ResponseEntity<CommonResponse<UserInfoDTO>> userInfo(HttpSession session) throws Exception {
 
-        log.info(this.getClass().getName() + ".userInfo Start!");
+        log.info("{}.userInfo Start!", this.getClass().getName());
 
         // Session 저장된 로그인한 회원아이디 가져오기
         String userId = CmmUtil.nvl((String) session.getAttribute("SS_USER_ID"));
@@ -39,7 +39,7 @@ public class UserInfoController {
         UserInfoDTO rDTO = Optional.ofNullable(userInfoService.getUserInfo(pDTO))
                 .orElseGet(() -> UserInfoDTO.builder().build());
 
-        log.info(this.getClass().getName() + ".userInfo End!");
+        log.info("{}.userInfo End!", this.getClass().getName());
 
         return ResponseEntity.ok(
                 CommonResponse.of(HttpStatus.OK, HttpStatus.OK.series().name(), rDTO));

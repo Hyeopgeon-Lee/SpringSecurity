@@ -25,20 +25,20 @@ import java.util.Optional;
 public class LoginController {
 
     @PostMapping(value = "loginSuccess")
-    public ResponseEntity<CommonResponse> loginSuccess(@AuthenticationPrincipal AuthInfo authInfo, HttpSession session) {
+    public ResponseEntity<CommonResponse<MsgDTO>> loginSuccess(@AuthenticationPrincipal AuthInfo authInfo, HttpSession session) {
 
-        log.info(this.getClass().getName() + ".loginSuccess Start!");
+        log.info("{}.loginSuccess Start!", this.getClass().getName());
 
         // Spring Security에 저장된 정보 가져오기
-        UserInfoDTO rDTO = Optional.ofNullable(authInfo.getUserInfoDTO()).orElseGet(() -> UserInfoDTO.builder().build());
+        UserInfoDTO rDTO = Optional.ofNullable(authInfo.userInfoDTO()).orElseGet(() -> UserInfoDTO.builder().build());
 
         String userId = CmmUtil.nvl(rDTO.userId());
         String userName = CmmUtil.nvl(rDTO.userName());
         String userRoles = CmmUtil.nvl(rDTO.roles());
 
-        log.info("userId : " + userId);
-        log.info("userName : " + userName);
-        log.info("userRoles : " + userRoles);
+        log.info("userId : {}", userId);
+        log.info("userName : {}", userName);
+        log.info("userRoles : {}", userRoles);
 
         session.setAttribute("SS_USER_ID", userId);
         session.setAttribute("SS_USER_NAME", userName);
@@ -47,7 +47,7 @@ public class LoginController {
         // 결과 메시지 전달하기
         MsgDTO dto = MsgDTO.builder().result(1).msg(userName + "님 로그인이 성공하였습니다.").build();
 
-        log.info(this.getClass().getName() + ".loginSuccess End!");
+        log.info("{}.loginSuccess End!", this.getClass().getName());
 
         return ResponseEntity.ok(
                 CommonResponse.of(HttpStatus.OK, HttpStatus.OK.series().name(), dto));
@@ -75,9 +75,9 @@ public class LoginController {
      * 로그인 정보 가져오기
      */
     @PostMapping(value = "loginInfo")
-    public ResponseEntity<CommonResponse> loginInfo(HttpSession session) {
+    public ResponseEntity<CommonResponse<UserInfoDTO>> loginInfo(HttpSession session) {
 
-        log.info(this.getClass().getName() + ".loginInfo Start!");
+        log.info("{}.loginInfo Start!", this.getClass().getName());
 
         // Session 저장된 로그인한 회원 정보 가져오기
         String userId = CmmUtil.nvl((String) session.getAttribute("SS_USER_ID"));
@@ -87,7 +87,7 @@ public class LoginController {
         // 세션 값 전달할 데이터 구조 만들기
         UserInfoDTO dto = UserInfoDTO.builder().userId(userId).userName(userName).roles(roles).build();
 
-        log.info(this.getClass().getName() + ".loginInfo End!");
+        log.info("{}.loginInfo End!", this.getClass().getName());
 
         return ResponseEntity.ok(
                 CommonResponse.of(HttpStatus.OK, HttpStatus.OK.series().name(), dto));
