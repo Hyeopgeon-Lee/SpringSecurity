@@ -43,7 +43,7 @@ public class UserRegController {
     }
 
     @PostMapping(value = "insertUserInfo")
-    public ResponseEntity<CommonResponse> insertUserInfo(@Valid @RequestBody UserInfoDTO pDTO,
+    public ResponseEntity<?> insertUserInfo(@Valid @RequestBody UserInfoDTO pDTO,
                                                          BindingResult bindingResult) {
 
         log.info(this.getClass().getName() + ".insertUserInfo Start!");

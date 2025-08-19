@@ -12,72 +12,93 @@ import lombok.Builder;
 
 import java.io.Serializable;
 
+/**
+ * 사용자 정보 DTO (Data Transfer Object)
+ * - 클라이언트 ↔ 서버 간 데이터 전송을 위한 객체
+ * - 회원가입, 로그인, 사용자 정보 조회 등에 활용됨
+ */
 @Builder
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public record UserInfoDTO(
 
+        /** 사용자 아이디 (로그인 ID) */
         @NotBlank(message = "아이디는 필수 입력 사항입니다.")
         @Size(min = 4, max = 16, message = "아이디는 최소 4글자에서 16글자까지 입력가능합니다.")
         String userId,
 
+        /** 사용자 이름 */
         @NotBlank(message = "이름은 필수 입력 사항입니다.")
         @Size(max = 10, message = "이름은 10글자까지 입력가능합니다.")
         String userName,
 
+        /** 비밀번호 (암호화되어 저장됨) */
         @NotBlank(message = "비밀번호는 필수 입력 사항입니다.")
         @Size(max = 16, message = "비밀번호는 16글자까지 입력가능합니다.")
         String password,
 
+        /** 이메일 주소 */
         @NotBlank(message = "이메일은 필수 입력 사항입니다.")
         @Size(max = 30, message = "이메일은 30글자까지 입력가능합니다.")
         @Email String email,
 
+        /** 기본 주소 */
         @NotBlank(message = "주소는 필수 입력 사항입니다.")
         @Size(max = 30, message = "주소는 30글자까지 입력가능합니다.")
         String addr1,
 
+        /** 상세 주소 */
         @NotBlank(message = "상세 주소는 필수 입력 사항입니다.")
         @Size(max = 100, message = "상세 주소는 100글자까지 입력가능합니다.")
         String addr2,
+
+        /** 등록자 ID */
         String regId,
+
+        /** 등록일시 */
         String regDt,
+
+        /** 수정자 ID */
         String chgId,
+
+        /** 수정일시 */
         String chgDt,
+
+        /** 사용자 권한 (예: ROLE_USER, ROLE_ADMIN 등) */
         String roles,
 
-        // 회원가입시, 중복가입을 방지 위해 사용할 변수
-        // DB를 조회해서 회원이 존재하면 Y값을 반환함
-        // DB테이블에 존재하지 않는 가상의 컬럼(ALIAS)
-        String existsYn) implements Serializable {
+        /**
+         * 회원가입 시 중복가입 여부 확인을 위한 필드
+         * DB에 존재하지 않는 가상의 컬럼으로 사용됨 (ALIAS 컬럼)
+         */
+        String existsYn
+) implements Serializable {
 
     /**
-     * 패스워드, 권한 등 회원 가입을 위한 정보 만들기
+     * 회원가입용 사용자 정보 생성 메서드
+     * - 비밀번호 암호화, 권한 설정, 등록일/수정일 자동 세팅
      */
     public static UserInfoDTO createUser(UserInfoDTO pDTO, String password, String roles) throws Exception {
-
-        UserInfoDTO rDTO = UserInfoDTO.builder()
+        return UserInfoDTO.builder()
                 .userId(pDTO.userId())
                 .userName(pDTO.userName())
-                .password(password) // Spring Security 생성해준 암호화된 비밀번호
-                .email(EncryptUtil.encAES128CBC(pDTO.email()))
+                .password(password) // Spring Security로 암호화된 비밀번호 저장
+                .email(EncryptUtil.encAES128CBC(pDTO.email())) // 이메일 암호화 저장
                 .addr1(pDTO.addr1())
                 .addr2(pDTO.addr2())
-                .roles(roles) // 권한
+                .roles(roles) // 권한 설정
                 .regId(pDTO.userId())
-                .regDt(DateUtil.getDateTime("yyyy-MM-dd hh:mm:ss"))
+                .regDt(DateUtil.getDateTime("yyyy-MM-dd HH:mm:ss"))
                 .chgId(pDTO.userId())
-                .chgDt(DateUtil.getDateTime("yyyy-MM-dd hh:mm:ss")).build();
-
-        return rDTO;
+                .chgDt(DateUtil.getDateTime("yyyy-MM-dd HH:mm:ss"))
+                .build();
     }
 
     /**
-     * DTO 결과를 entity 변환하기
-     * 이전 실습에서 진행한 Jackson 객체를 통해 처리도 가능함
+     * DTO → JPA Entity 변환 메서드
+     * - 데이터베이스에 저장할 때 사용됨
      */
     public static UserInfoEntity of(UserInfoDTO dto) {
-
-        UserInfoEntity entity = UserInfoEntity.builder()
+        return UserInfoEntity.builder()
                 .userId(dto.userId())
                 .userName(dto.userName())
                 .password(dto.password())
@@ -88,31 +109,27 @@ public record UserInfoDTO(
                 .regId(dto.regId())
                 .regDt(dto.regDt())
                 .chgId(dto.chgId())
-                .chgDt(dto.chgDt()).build();
-
-        return entity;
+                .chgDt(dto.chgDt())
+                .build();
     }
 
     /**
-     * JPA로 전달받은 entity 결과를 DTO로 변환하기
-     * 이전 실습에서 진행한 Jackson 객체를 통해 처리도 가능함
+     * JPA Entity → DTO 변환 메서드
+     * - 이메일 복호화 포함 (조회 시 사용자에게 복호화된 값 제공)
      */
     public static UserInfoDTO from(UserInfoEntity entity) throws Exception {
-
-        UserInfoDTO rDTO = UserInfoDTO.builder()
+        return UserInfoDTO.builder()
                 .userId(entity.getUserId())
                 .userName(entity.getUserName())
                 .password(entity.getPassword())
-                .email(EncryptUtil.decAES128CBC(CmmUtil.nvl(entity.getEmail())))
+                .email(EncryptUtil.decAES128CBC(CmmUtil.nvl(entity.getEmail()))) // 복호화된 이메일 반환
                 .addr1(entity.getAddr1())
                 .addr2(entity.getAddr2())
                 .roles(entity.getRoles())
                 .regId(entity.getRegId())
                 .regDt(entity.getRegDt())
                 .chgId(entity.getChgId())
-                .chgDt(entity.getChgDt()).build();
-
-        return rDTO;
+                .chgDt(entity.getChgDt())
+                .build();
     }
 }
-
