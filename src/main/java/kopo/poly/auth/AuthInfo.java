@@ -2,7 +2,6 @@ package kopo.poly.auth;
 
 import kopo.poly.dto.UserInfoDTO;
 import kopo.poly.util.CmmUtil;
-import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

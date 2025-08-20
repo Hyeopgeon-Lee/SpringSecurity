@@ -29,8 +29,8 @@ public class CommonResponse<T> {
     public static <T> CommonResponse<T> of(HttpStatus httpStatus, String message, T data) {
         return CommonResponse.<T>builder()
                 .httpStatus(httpStatus)
-                .message(message)
                 .data(data)
+                .message(message)
                 .build();
     }
 
